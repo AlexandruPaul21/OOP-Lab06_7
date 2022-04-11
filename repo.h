@@ -8,7 +8,7 @@
 #include <vector>
 #include "domain.h"
 #include <sstream>
-#include "vector_man.h"
+//#include "vector_man.h"
 //#include "vector_man.cpp"
 
 using namespace std;
@@ -36,7 +36,7 @@ public:
      * Functie getter
      * @return un vector cu elemente de tip medcicine
      */
-    Vector_Man<Medicine>& get_elems();
+    vector<Medicine>& get_elems();
 
     /**
      * Sterge medicamentul de pe o pozitie
@@ -46,7 +46,7 @@ public:
 
 
 private:
-    Vector_Man<Medicine> elems{5};
+    vector<Medicine> elems;
 };
 
 /**

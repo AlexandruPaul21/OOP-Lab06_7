@@ -108,7 +108,7 @@ void Console::filter() const {
     string op;
     getline(cin,op);
 
-    Vector_Man<Medicine> rez(srv.get_all_ent().size());
+    vector<Medicine> rez(srv.get_all_ent().size());
 
     if(op=="1"){
         cout<<"Introduceti pretul de cautat: ";
@@ -163,7 +163,7 @@ void Console::sort() const {
     string op;
     getline(cin,op);
 
-    Vector_Man<Medicine> rez(srv.get_all_ent().size());
+    vector<Medicine> rez(srv.get_all_ent().size());
 
     if(op=="1" || op=="2" || op=="3"){
         srv.sort((op[0]-'0')-1,rez);
@@ -180,7 +180,7 @@ void Console::sort() const {
 }
 
 void Console::show_all() const {
-    Vector_Man<Medicine>& farm=srv.get_all_ent();
+    vector<Medicine>& farm=srv.get_all_ent();
     if(farm.size()==0) return;
     cout<<"\n------------------Medicamente existente------------------\n";
     for(int i=0; i<farm.size(); ++i){

@@ -112,8 +112,8 @@ void test_repo(){
 
     //test add elem & test get elems
     repo.add_medicine(m);
-    Vector_Man<Medicine> mv;
-    repo.get_elems().copy(mv);
+    vector<Medicine> mv;
+    mv=repo.get_elems();
 
     assert(mv.size() == 1);
     assert(mv[0].get_name() == "Parasinus");
@@ -125,7 +125,7 @@ void test_repo(){
     Medicine m1=Medicine("Parasinus","Pharma","paracetamol",10);
     repo.modify_medicine(m1,0);
 
-    repo.get_elems().copy(mv);
+    mv=repo.get_elems();
 
     assert(mv.size()==1);
     assert(mv[0].get_name()=="Parasinus");
@@ -137,7 +137,7 @@ void test_repo(){
     repo.add_medicine(m);
     repo.delete_medicine(0);
 
-    repo.get_elems().copy(mv);
+    mv=repo.get_elems();
 
     assert(mv.size()==1);
     assert(mv[0].get_name()=="Parasinus");
@@ -155,8 +155,8 @@ void test_service(){
     //test add
     s.add("Parasinus","Bayer","paracetamol",10);
 
-    Vector_Man<Medicine> mv;
-    s.get_all_ent().copy(mv);
+    vector<Medicine> mv;
+    mv=s.get_all_ent();
     assert(mv[0].get_price()==10);
     assert(mv[0].get_name()=="Parasinus");
     assert(mv[0].get_prod()=="Bayer");
@@ -215,7 +215,7 @@ void test_service(){
     //test mod
     s.modify(0,"ParaPenta","Dona","paracetamol",15);
 
-    s.get_all_ent().copy(mv);
+    mv=s.get_all_ent();
 
     assert(mv[0].get_price()==15);
     assert(mv[0].get_name()=="ParaPenta");
@@ -244,7 +244,7 @@ void test_service(){
     assert(s.search("Parasinus","Bayr","paracetamol",10)==0);
 
     s.del(0);
-    s.get_all_ent().copy(mv);
+    mv=s.get_all_ent();
 
     assert(mv[0].get_price()==10);
     assert(mv[0].get_name()=="Parasinus");
@@ -280,7 +280,7 @@ void test_service(){
     s.add("Algocalmin","Pharma1","ibuprofen",10);
 
     {
-        Vector_Man<Medicine> res(5);
+        vector<Medicine> res;
         s.filter(1, "parasinus", res);
         assert(res.size() == 2);
         assert(res[0].get_price() == 10);
@@ -295,7 +295,7 @@ void test_service(){
     }
 
     {
-        Vector_Man<Medicine> res(5);
+        vector<Medicine> res;
         s.filter(0, "10", res);
         assert(res.size() == 2);
         assert(res[0].get_price() == 10);
@@ -319,7 +319,7 @@ void test_service(){
     //sort
 
     {
-        Vector_Man<Medicine> res(5);
+        vector<Medicine> res;
         s.sort(0,res);
         assert(res.size()==3);
         assert(res[0].get_name()=="Algocalmin");
@@ -328,7 +328,7 @@ void test_service(){
     }
 
     {
-        Vector_Man<Medicine> res(5);
+        vector<Medicine> res;
         s.sort(1,res);
         assert(res.size()==3);
         assert(res[0].get_name()=="Parasinus");
@@ -337,7 +337,7 @@ void test_service(){
     }
 
     {
-        Vector_Man<Medicine> res(5);
+        vector<Medicine> res;
         s.sort(2,res);
         assert(res.size()==3);
         assert(res[0].get_name()=="Algocalmin");

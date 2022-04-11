@@ -24,7 +24,7 @@ public:
      * Functia returneaza toate entitatile
      * @return un vector cu elemente de tip medcine
      */
-    Vector_Man<Medicine>& get_all_ent() ;
+    vector<Medicine>& get_all_ent() ;
 
     /**
      * Adauaga un element in lista de obicete
@@ -70,14 +70,14 @@ public:
      * @param val valoarea
      * @param res vectorul rezultat
      */
-    void filter(int crit,string val,Vector_Man<Medicine>&);
+    void filter(int crit,string val,vector<Medicine>&);
 
     /**
      * Functia de sortare
      * @param crit criteriul
      * @param rez rezultateu
      */
-    void sort(int crit,Vector_Man<Medicine>& rez);
+    void sort(int crit,vector<Medicine>& rez);
 
     ~Service();
 private:

@@ -3,14 +3,14 @@
 //
 
 #include "service.h"
-#include "vector_man.cpp"
+//#include "vector_man.cpp"
 
 Service::Service(Repo& rp, Validator& vd) {
     repo=rp;
     valid=vd;
 }
 
-Vector_Man<Medicine>& Service::get_all_ent() {
+vector<Medicine>& Service::get_all_ent() {
     return repo.get_elems();
 }
 
@@ -73,7 +73,7 @@ bool Service::search(const string cname, const string cprod, const string csubst
 
 }
 
-void Service::filter(int crit, string val,Vector_Man<Medicine>& rez) {
+void Service::filter(int crit, string val,vector<Medicine>& rez) {
     if(crit==0){
         vector <string> err;
         int prc=0;
@@ -109,7 +109,7 @@ void Service::filter(int crit, string val,Vector_Man<Medicine>& rez) {
     return;
 }
 
-void Service::sort(int crit, Vector_Man<Medicine>& rez) {
+void Service::sort(int crit, vector<Medicine>& rez) {
     auto& el=repo.get_elems();
     for(int i=0; i<el.size()-1; ++i){
         for(int j=i+1; j<el.size(); ++j){

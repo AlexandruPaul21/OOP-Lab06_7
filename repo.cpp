@@ -3,8 +3,8 @@
 //
 
 #include "repo.h"
-#include "vector_man.h"
-#include "vector_man.cpp"
+//#include "vector_man.h"
+//#include "vector_man.cpp"
 
 void Repo::add_medicine(const Medicine &a) {
     this->elems.push_back(a);
@@ -14,7 +14,7 @@ void Repo::modify_medicine(const Medicine &a, int poz) {
     this->elems[poz]=a;
 }
 
-Vector_Man<Medicine>& Repo::get_elems(){
+vector<Medicine>& Repo::get_elems(){
     return elems;
 }
 
@@ -23,7 +23,8 @@ Repo::Repo() {
 }
 
 void Repo::delete_medicine(int poz) {
-    this->elems.erase(poz);
+    //this->elems.erase(poz);
+    this->elems.erase(elems.begin()+poz);
 }
 
 ostream &operator<<(ostream &out, const RepoException &ex) {

@@ -10,6 +10,7 @@
 #include "service.h"
 #include <iostream>
 #include "vector_man.cpp"
+#include "recipe_class.h"
 
 using namespace std;
 
@@ -19,6 +20,7 @@ void test_all(){
     test_repo();
     test_service();
     test_vector();
+    test_recipe();
     cout<<"Le-o luat\n";
 }
 
@@ -411,4 +413,38 @@ void test_vector(){
     Vector_Man<Medicine> A;
     auto m=Medicine("Parasinus","Pharma","paracetamol",10);
     A.push_back(m);
+}
+
+void test_recipe(){
+    Recipe r;
+    auto m=Medicine("Parasinus","Bayer","paracetamol",10);
+
+    r.add_to_recipe(m);
+    vector<Medicine> res;
+    res=r.get_all();
+    assert(res.size()==1);
+    assert(res[0].get_name()=="Parasinus");
+    assert(res[0].get_subst()=="paracetamol");
+    assert(res[0].get_prod()=="Bayer");
+    assert(res[0].get_price()==10);
+
+    r.add_to_recipe(m);
+    res=r.get_all();
+    assert(res.size()==2);
+
+    r.empty_recipe();
+    res=r.get_all();
+    assert(res.size()==0);
+
+    vector<Medicine> s;
+    s.push_back(Medicine("Parasinus","Bayer","parasinus",10));
+    s.push_back(Medicine("ParaPenta","Pharma","parasinus",5));
+    s.push_back(Medicine("Algocalmin","Pharma1","ibuprofen",10));
+
+    r.random_add(s,2);
+    assert(r.get_all().size()==2);
+
+    r.save_to_file("test.out");
+
+    return;
 }

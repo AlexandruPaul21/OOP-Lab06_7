@@ -15,6 +15,6 @@ int main() {
     Service srv{repo,valid};
 
     Console master=Console(srv);
-    //master.show_ui();
+    master.show_ui();
     return 0;
 }

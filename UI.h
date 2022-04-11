@@ -6,6 +6,7 @@
 #define LAB06_7_UI_H
 
 #include "service.h"
+#include "recipe_class.h"
 
 int get_pos_nr();
 
@@ -60,6 +61,8 @@ private:
      * UI pentru sortare
      */
     void sort() const;
+
+    void recipe() const;
 
     Service &srv;
 };

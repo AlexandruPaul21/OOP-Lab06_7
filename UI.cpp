@@ -220,6 +220,52 @@ void Console::mod_ui() const{
     }
 }
 
+void Console::recipe() const {
+    cout << "Meniu pentru crearea unei retete\n";
+    Recipe r;
+    while(true) {
+        cout << "Numar de medicamente in reteta: "<< r.get_all().size()<<"\n";
+        cout << "Operatii disponibile: \n";
+        cout << "1. Adauga medicament\n";
+        cout << "2. Goleste reteta\n";
+        cout << "3. Genereaza reteta(random)\n";
+        cout << "4. Export\n";
+        cout << "0. Exit\n";
+        cout << "Introduceti optiunea: ";
+        string ans;
+        cin >> ans;
+        if (ans == "1") {
+            show_all();
+            cout<<"Introduceti indicele medicamentului de adaugat: ";
+            int op=get_pos_nr();
+            if(op==-1 && op>=srv.get_all_ent().size()){
+                cout<<"Indicele trebuie sa fie un numar natural, care poate fi maxim nr de elemente al sirului -1\n";
+                continue;
+            }
+            r.add_to_recipe(srv.get_all_ent()[op]);
+        } else if (ans == "2") {
+            r.empty_recipe();
+        } else if (ans == "3") {
+            cout<<"Introduceti numarul de medicamente ce doriti sa fie adaugat aleatoriu: ";
+            int q=get_pos_nr();
+            if(q==-1 || q==0){
+                cout<<"Numarul trebuie sa fie mai mare egal cu 0 si natural\n";
+                continue;
+            }
+            r.random_add(srv.get_all_ent(),q);
+        } else if (ans == "4") {
+            cout<<"Introduceti numele fisierului: ";
+            string file;
+            cin>>file;
+            r.save_to_file(file);
+        } else if (ans == "0") {
+            break;
+        } else {
+            cout<<"Varianta invalida!\n";
+        }
+    }
+}
+
 void Console::show_ui() const {
     cout<<"Bine ati venit!\n";
     bool end=false;
@@ -232,20 +278,21 @@ void Console::show_ui() const {
         cout<<"5. Cautare medicament\n";
         cout<<"6. Filtrare\n";
         cout<<"7. Sortare\n";
+        cout<<"8. Creare reteta\n";
         cout<<"0. Exit\n";
         cout << "Comanda dvs: ";
         string ans;
         getline(cin, ans);
-        if(ans==""){
+        if(ans=="") {
             getline(cin, ans);
         }
-        if(ans=="1"){
+        if(ans=="1") {
             add_ui();
-        } else if(ans=="2"){
+        } else if(ans=="2") {
             mod_ui();
-        } else if(ans=="3"){
+        } else if(ans=="3") {
             del_ui();
-        } else if(ans=="4"){
+        } else if(ans=="4") {
             show_all();
         } else if(ans=="5") {
             cautare();
@@ -253,7 +300,9 @@ void Console::show_ui() const {
             filter();
         } else if(ans=="7") {
             sort();
-        } else if(ans=="0"){
+        } else if(ans=="8") {
+            recipe();
+        } else if(ans=="0") {
             end=true;
         } else {
             cout<<"Comanada introdusa nu este corecta!\n";

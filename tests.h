@@ -32,4 +32,9 @@ void test_service();
  */
 void test_vector();
 
+/**
+ * Test pentru recipe
+ */
+ void test_recipe();
+
 #endif //LAB06_7_TESTS_H

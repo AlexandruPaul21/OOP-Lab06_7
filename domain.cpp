@@ -29,6 +29,14 @@ Medicine::Medicine() {
     subst="";
 }
 
+Medicine Medicine::operator=(const Medicine &ot) {
+    name=ot.name;
+    prod=ot.prod;
+    subst=ot.subst;
+    price=ot.price;
+    return (*this);
+}
+
 bool has_letters(const string S){
     for(int i=0; i<S.size(); ++i){
         if('A'<=S[i] && S[i]<='Z' || 'a'<=S[i] && S[i]<='z'){

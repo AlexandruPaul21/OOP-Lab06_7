@@ -59,6 +59,9 @@ public:
     //suprascriem operatorul de egalitate
     bool operator==(const Medicine& ot);
 
+    //egalitate
+    Medicine operator=(const Medicine& ot);
+
 private:
     string name;
     string prod;

@@ -2,8 +2,11 @@
 // Created by Alexandru-Paul Sirbu on 26.03.2022.
 //
 
+#include <algorithm>
 #include "service.h"
 //#include "vector_man.cpp"
+
+using std::sort;
 
 Service::Service(Repo& rp, Validator& vd) {
     repo=rp;
@@ -57,19 +60,18 @@ Service::~Service() {
 }
 
 bool Service::search(const string cname, const string cprod, const string csubst, const int cprice) {
-    vector<string> err;
+    //vector<string> err;
 
     valid.validate(cname,cprod,csubst,cprice);
 
     auto m=Medicine(cname,cprod,csubst,cprice);
 
-    auto& all=repo.get_elems();
-    for(int i=0; i<all.size(); ++i){
-        if(all[i]==m){
-            return true;
-        }
-    }
-    return false;
+    auto it= find_if(repo.get_elems().begin(),repo.get_elems().end(),[=](Medicine& med){
+       return med.get_subst()==m.get_subst() && med.get_price()==m.get_price() && med.get_name()==m.get_name() &&
+       med.get_prod()==m.get_prod();
+    });
+
+    return it<repo.get_elems().end();
 
 }
 
@@ -90,37 +92,40 @@ void Service::filter(int crit, string val,vector<Medicine>& rez) {
             throw RepoException(err);
         }
 
-        auto& all=repo.get_elems();
-
-        for(int i=0; i<all.size(); ++i){
-            if(all[i].get_price()==prc){
-                rez.push_back(all[i]);
-            }
-        }
+        rez.clear();
+        copy_if(repo.get_elems().begin(), repo.get_elems().end(), back_inserter(rez), [=](Medicine& m){
+            return m.get_price()==prc;
+        });
         return;
     }
-    auto& all=repo.get_elems();
 
-    for(int i=0; i<all.size(); ++i){
-        if(all[i].get_subst()==val){
-            rez.push_back(all[i]);
-        }
-    }
-    return;
+    rez.clear();
+    copy_if(repo.get_elems().begin(),repo.get_elems().end(), back_inserter(rez), [=](Medicine& m){
+        return m.get_subst()==val;
+    });
+
+}
+
+bool crit_0(const Medicine& el1, const Medicine& el2){
+    return el1.get_name()<el2.get_name();
+}
+
+bool crit_1(const Medicine& el1, const Medicine& el2){
+    return el1.get_prod()<el2.get_prod();
+}
+
+bool crit_2(const Medicine& el1, const Medicine& el2){
+    return el1.get_subst()<el2.get_subst() || (el1.get_subst()==el2.get_subst() &&
+    el1.get_price()<el2.get_price());
 }
 
 void Service::sort(int crit, vector<Medicine>& rez) {
-    auto& el=repo.get_elems();
-    for(int i=0; i<el.size()-1; ++i){
-        for(int j=i+1; j<el.size(); ++j){
-            if((crit==0 && el[i].get_name()>el[j].get_name()) || (crit==1 && el[i].get_prod()>el[j].get_prod())
-            || (crit==2 && (el[i].get_subst()>el[j].get_subst() || (el[i].get_subst()==el[j].get_subst() &&
-            el[i].get_price()>el[j].get_price())))) {
-                swap(el[i],el[j]);
-            }
-        }
-    }
-    for(int i=0; i<el.size(); ++i){
-        rez.push_back(el[i]);
+    rez=repo.get_elems();
+    if(crit==0){
+        ::sort(rez.begin(),rez.end(), crit_0);
+    } else if(crit==1){
+        ::sort(rez.begin(),rez.end(), crit_1);
+    } else if(crit==2){
+        ::sort(rez.begin(),rez.end(), crit_2);
     }
 }

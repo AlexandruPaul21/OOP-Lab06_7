@@ -446,5 +446,8 @@ void test_recipe(){
 
     r.save_to_file("test.out");
 
+    r.random_add(s,5);
+    r.save_to_file("file.csv");
+
     return;
 }

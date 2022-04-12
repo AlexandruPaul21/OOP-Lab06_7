@@ -29,9 +29,11 @@ void Recipe::random_add(const vector<Medicine>& elems,const int q) {
 
 void Recipe::save_to_file(const string filename) {
     ofstream fout(filename);
+    fout<<"First cell\n";
+    fout<<"Nrcrt. Nume Prod Subst Pret\n";
     int i=0;
     for(auto& med : comp){
-        fout<<i++<<". "<<med.get_name()<<" "<<med.get_price()<<"\n";
+        fout<<i++<<" "<<med.get_name()<<" "<<med.get_prod()<<" "<<med.get_subst()<<" "<<med.get_price()<<"\n";
     }
 }
 

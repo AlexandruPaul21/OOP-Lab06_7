@@ -62,6 +62,9 @@ private:
      */
     void sort() const;
 
+    /**
+     * UI pentru recipe
+     */
     void recipe() const;
 
     Service &srv;

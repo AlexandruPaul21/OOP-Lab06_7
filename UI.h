@@ -67,6 +67,7 @@ private:
      */
     void recipe() const;
 
+    void batch_mode() const;
     Service &srv;
 };
 

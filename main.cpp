@@ -9,7 +9,7 @@
  * @return 0
  */
 int main() {
-    test_all();
+    //test_all();
     Repo repo;
     Validator valid;
     Service srv{repo,valid};

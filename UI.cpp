@@ -266,6 +266,106 @@ void Console::recipe() const {
     }
 }
 
+int to_nr(string s){
+    int ret=0;
+    for(int i=0; i<s.size(); ++i){
+        if('0'<=s[i] && s[i]<='9'){
+            ret=ret*10+(s[i]-'0');
+        } else {
+            ret=-1;
+            break;
+        }
+    }
+    return ret;
+}
+
+void Console::batch_mode() const{
+    cout<<"Introduceti comenzile in forma(primul cuv din optiune dupa argumentele)\n";
+    cout<<"adauga nume prod subst pret\n";
+    cout<<"sterge pozitie\n";
+    cout<<"modifica pozitie nume prod subst pret\n";
+    vector<string> arg;
+    string args="";
+    vector<int> unsolved;
+    for(int j=0;args!="finish "; ++j){
+        getline(cin,args);
+        arg.clear();
+        bool first=true;
+        string cuv;
+        string cmd;
+        string poz,name,prod,subst,price;
+        args+=" ";
+        for(int i=0; i<args.size(); ++i){
+            if(args[i]==' '){
+                if(first){
+                   cmd=cuv;
+                   cuv="";
+                   first=false;
+                } else {
+                    arg.push_back(cuv);
+                    cuv="";
+                }
+            } else {
+                cuv+=args[i];
+            }
+        }
+        if(cmd=="finish") {
+            break;
+        } else if(cmd=="adauga") {
+            if(arg.size()!=4){
+                unsolved.push_back(j);
+                continue;
+            } else {
+                name=arg[0];
+                prod=arg[1];
+                subst=arg[2];
+                int pret= to_nr(arg[3]);
+                try {
+                    srv.add(name,prod,subst,pret);
+                } catch (...){
+                    unsolved.push_back(j);
+                }
+            }
+        } else if(cmd=="sterge"){
+            if(arg.size()!=1){
+                unsolved.push_back(j);
+                continue;
+            } else {
+                int pz= to_nr(arg[0]);
+                try{
+                    srv.del(pz);
+                } catch(...){
+                    unsolved.push_back(j);
+                }
+            }
+        } else if(cmd=="modifica"){
+            if(arg.size()!=5){
+                unsolved.push_back(j);
+                continue;
+            } else {
+                int pz= to_nr(arg[0]);
+                name=arg[1];
+                prod=arg[2];
+                subst=arg[3];
+                int pret= to_nr(arg[4]);
+                try {
+                    srv.modify(pz, name, prod, subst, pret);
+                } catch(...){
+                    unsolved.push_back(j);
+                }
+            }
+        } else unsolved.push_back(j);
+    }
+    cout<<"Total comenzi nerezolvate: "<<unsolved.size()<<"(pentru raport complet, adauga -d la finish)\n";
+//    if(arg[0]=="-d"){
+//        for(auto& it : unsolved){
+//            cout<<it<<" ";
+//        }
+//        cout<<"\n";
+//    }
+}
+
+
 void Console::show_ui() const {
     cout<<"Bine ati venit!\n";
     bool end=false;
@@ -279,6 +379,7 @@ void Console::show_ui() const {
         cout<<"6. Filtrare\n";
         cout<<"7. Sortare\n";
         cout<<"8. Creare reteta\n";
+        cout<<"9. Batch Mode\n";
         cout<<"0. Exit\n";
         cout << "Comanda dvs: ";
         string ans;
@@ -302,6 +403,8 @@ void Console::show_ui() const {
             sort();
         } else if(ans=="8") {
             recipe();
+        } else if(ans=="9") {
+            batch_mode();
         } else if(ans=="0") {
             end=true;
         } else {

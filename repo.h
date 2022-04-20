@@ -20,19 +20,19 @@ using namespace std;
 class Repo{
 public:
     Repo();
-    //Repo(const Repo& ot){*this=ot;}
+    Repo(const Repo& ot){*this=ot;}
     /**
      * Adauga un medicament in repo
      * @param a medicamentul de adaugat
      */
-    void add_medicine(const Medicine& a);
+    virtual void add_medicine(const Medicine& a);
 
     /**
      * Modifica un medicament deja existent
      * @param a medicamentul de modificat
      * @param poz pozitia medicamentului
      */
-    void modify_medicine(const Medicine& a, int poz);
+    virtual void modify_medicine(const Medicine& a, int poz);
 
     /**
      * Functie getter
@@ -44,11 +44,12 @@ public:
      * Sterge medicamentul de pe o pozitie
      * @param poz pozitia medicamentului
      */
-    void delete_medicine(int poz);
+    virtual void delete_medicine(int poz);
 
     virtual ~Repo(){};
 
 private:
+    int op;
     vector<Medicine> elems;
 };
 
@@ -56,6 +57,7 @@ private:
 class FileRepo: public Repo{
 private:
     string filename;
+    int op;
 
     void load_from_file();
 
@@ -64,9 +66,24 @@ private:
 public:
     FileRepo()=default;
     FileRepo(string fn);
-    //FileRepo(const FileRepo& ot){*this=ot;};
+    FileRepo(const FileRepo& ot){*this=ot;};
 
     ~FileRepo();
+
+    void add_medicine(const Medicine& a) override{
+        Repo::add_medicine(a);
+        save_to_file();
+    }
+
+    void modify_medicine(const Medicine& a,int poz) override{
+        Repo::modify_medicine(a,poz);
+        save_to_file();
+    }
+
+    void delete_medicine(int poz) override{
+        Repo::delete_medicine(poz);
+        save_to_file();
+    }
 
 };
 

@@ -9,6 +9,7 @@
 #include "repo.h"
 #include "service.h"
 #include <iostream>
+#include <fstream>
 #include "vector_man.cpp"
 #include "recipe_class.h"
 
@@ -156,7 +157,7 @@ void test_repo(){
 }
 
 void test_service(){
-    auto r=FileRepo("chaos.txt");
+    FileRepo* r=new FileRepo("chaos.txt");
     auto v=Validator();
 
     auto s=Service(r,v);
@@ -393,6 +394,11 @@ void test_service(){
         assert(res[1].get_name()=="ParaPenta");
         assert(res[2].get_name()=="Parasinus");
     }
+
+    ofstream dll("chaos.txt");
+    dll.close();
+
+    delete r;
 
 }
 

@@ -8,6 +8,7 @@
 #include "repo.h"
 #include "domain.h"
 #include <vector>
+#include <memory>
 
 /**
  * Clasa Service din arhitectura GRASP
@@ -19,7 +20,7 @@ public:
      * @param rp repo
      * @param vd validator
      */
-    Service(FileRepo& rp, Validator& vd);
+    Service(FileRepo* rp, Validator& vd);
 
     /**
      * Functia returneaza toate entitatile
@@ -85,9 +86,9 @@ public:
     ///destructor
     ~Service();
 private:
-    FileRepo repo;
+    FileRepo* repo;
     Validator valid;
-    vector<ActUndo*> undo_act;
+    vector<unique_ptr<ActUndo>> undo_act;
 };
 
 #endif //LAB06_7_SERVICE_H

@@ -27,6 +27,7 @@ Repo::Repo() {
 void Repo::delete_medicine(int poz) {
     //this->elems.erase(poz);
     this->elems.erase(elems.begin()+poz);
+    ++op;
 }
 
 ostream &operator<<(ostream &out, const RepoException &ex) {
@@ -70,5 +71,5 @@ void FileRepo::save_to_file() {
 }
 
 FileRepo::~FileRepo() {
-    save_to_file();
+
 }

@@ -19,7 +19,7 @@ public:
      * Constructors and destructors
      */
     Vector_Man();
-    Vector_Man(const int sz);
+    explicit Vector_Man(int sz);
 
     //Vector_Man(const Vector_Man<ElemType>& ot);
 
@@ -34,7 +34,7 @@ public:
      * Functia adauga un element la finalul listei
      * @param elm elemntul de adaugat
      */
-    void push_back(const ElemType elm);
+    void push_back(const ElemType& elm);
 
     /**
      * Functia returneaza un pointer la inceputul zonei de memorie
@@ -50,19 +50,19 @@ public:
      * Functia sterge un element de o pozitie data
      * @param pos pozitia
      */
-    void erase(const int pos);
+    void erase(const int& pos);
 
     /**
      * Verifica daca containerul e gol
      * @return 1 sau 0 in functie de starea lui
      */
-    bool empty()const;
+    [[nodiscard]]bool empty()const;
 
     /**
      * Returneaza nr de elemente din container
      * @return un intreg
      */
-    int size() const;
+    [[nodiscard]]int size() const;
 
     /**
      * Suprascriem operatorul []

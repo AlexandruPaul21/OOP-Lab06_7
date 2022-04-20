@@ -9,12 +9,12 @@
  * @return 0
  */
 int main() {
-    //test_all();
-    FileRepo* repo=new FileRepo{"data.txt"};
+    test_all();
+    auto* repo=new FileRepo{"data.txt"};
     Validator valid;
     Service srv{repo,valid};
 
-    Console master=Console(srv);
+    auto master=Console(srv);
     master.show_ui();
     delete repo;
     return 0;

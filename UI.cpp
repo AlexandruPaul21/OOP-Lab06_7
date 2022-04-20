@@ -10,14 +10,14 @@ using namespace std;
 int get_pos_nr(){
     string S;
     getline(cin,S);
-    if(S=="") getline(cin,S);
+    if(S.empty()) getline(cin,S);
 
     bool ch=(S[0]==0);
 
     int ret=0;
-    for(int i=0; i<S.size(); ++i){
-        if('0'<=S[i] && S[i]<='9'){
-            ret=ret*10+(S[i]-'0');
+    for(auto& cha: S){
+        if('0'<=cha && cha<='9'){
+            ret=ret*10+(cha-'0');
         } else {
             ch=true;
         }
@@ -119,7 +119,7 @@ void Console::filter() const {
         } catch(...){
 
         }
-        if(rez.size()==0){
+        if(rez.empty()){
             cout<<"Nu a fost gasit nici-un rezultat\n";
             return;
         }
@@ -138,7 +138,7 @@ void Console::filter() const {
         } catch (...){
 
         }
-        if(rez.size()==0){
+        if(rez.empty()){
             cout<<"Nu a fost gasit nici-un rezultat\n";
             return;
         }
@@ -181,7 +181,7 @@ void Console::sort() const {
 
 void Console::show_all() const {
     vector<Medicine>& farm=srv.get_all_ent();
-    if(farm.size()==0) return;
+    if(farm.empty()) return;
     cout<<"\n------------------Medicamente existente------------------\n";
     for(int i=0; i<farm.size(); ++i){
         cout<<i<<". Nume: "<<farm[i].get_name()<<"; Producator: "<<farm[i].get_prod()<<"; Subst.act: "<<farm[i].get_subst();
@@ -266,11 +266,11 @@ void Console::recipe() const {
     }
 }
 
-int to_nr(string s){
+int to_nr(const string& s){
     int ret=0;
-    for(int i=0; i<s.size(); ++i){
-        if('0'<=s[i] && s[i]<='9'){
-            ret=ret*10+(s[i]-'0');
+    for(auto& ch: s){
+        if('0'<=ch && ch<='9'){
+            ret=ret*10+(ch-'0');
         } else {
             ret=-1;
             break;
@@ -285,7 +285,7 @@ void Console::batch_mode() const{
     cout<<"sterge pozitie\n";
     cout<<"modifica pozitie nume prod subst pret\n";
     vector<string> arg;
-    string args="";
+    string args;
     vector<int> unsolved;
     for(int j=0;args!="finish "; ++j){
         getline(cin,args);
@@ -295,8 +295,8 @@ void Console::batch_mode() const{
         string cmd;
         string poz,name,prod,subst,price;
         args+=" ";
-        for(int i=0; i<args.size(); ++i){
-            if(args[i]==' '){
+        for(auto& ch: args){
+            if(ch==' '){
                 if(first){
                    cmd=cuv;
                    cuv="";
@@ -306,7 +306,7 @@ void Console::batch_mode() const{
                     cuv="";
                 }
             } else {
-                cuv+=args[i];
+                cuv+=ch;
             }
         }
         if(cmd=="finish") {
@@ -395,7 +395,7 @@ void Console::show_ui() const {
         cout << "Comanda dvs: ";
         string ans;
         getline(cin, ans);
-        if(ans=="") {
+        if(ans.empty()) {
             getline(cin, ans);
         }
         if(ans=="1") {

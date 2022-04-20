@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <utility>
 #include "repo.h"
 //#include "vector_man.h"
 //#include "vector_man.cpp"
@@ -20,14 +21,9 @@ vector<Medicine>& Repo::get_elems(){
     return elems;
 }
 
-Repo::Repo() {
-
-}
-
 void Repo::delete_medicine(int poz) {
     //this->elems.erase(poz);
     this->elems.erase(elems.begin()+poz);
-    ++op;
 }
 
 ostream &operator<<(ostream &out, const RepoException &ex) {
@@ -38,7 +34,7 @@ ostream &operator<<(ostream &out, const RepoException &ex) {
 }
 
 FileRepo::FileRepo(string fn) {
-    filename=fn;
+    filename=move(fn);
     load_from_file();
 }
 
@@ -54,8 +50,8 @@ void FileRepo::load_from_file() {
             med.push_back(word);
         }
         int nr=0;
-        for(int i=0; i<med[3].size(); ++i){
-            nr=nr*10+(med[3][i]-'0');
+        for(auto& ch : med[3]){
+            nr=nr*10+(ch-'0');
         }
         Repo::add_medicine(Medicine(med[0],med[1],med[2],nr));
     }
@@ -68,8 +64,4 @@ void FileRepo::save_to_file() {
         fout<<it.get_name()<<";"<<it.get_prod()<<";"<<it.get_subst()<<";"<<it.get_price()<<"\n";
     }
     fout.close();
-}
-
-FileRepo::~FileRepo() {
-
 }

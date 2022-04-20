@@ -3,6 +3,7 @@
 //
 
 #include <algorithm>
+#include <memory>
 #include "service.h"
 //#include "vector_man.cpp"
 
@@ -18,60 +19,51 @@ vector<Medicine>& Service::get_all_ent() {
     return repo->get_elems();
 }
 
-void Service::add(const string cname, const string cprod, const string csubst, int cprice) {
-    valid.validate(cname,cprod,csubst,cprice);
+void Service::add(const string& cname, const string& cprod, const string& csubst, const int& cprice) {
+    Validator::validate(cname,cprod,csubst,cprice);
     auto m=Medicine(cname,cprod,csubst,cprice);
     auto& v=repo->get_elems();
     vector<string> err;
-    for(int i=0; i<v.size(); ++i){
-        if(v[i]==m){
-            err.push_back("Element deja existent");
+    for(auto& it : v){
+        if(it==m){
+            err.emplace_back("Element deja existent");
         }
     }
     if(!err.empty()){
         throw RepoException(err);
     }
     repo->add_medicine(m);
-    undo_act.push_back(unique_ptr<UndoAdd>(new UndoAdd{repo,m}));
+    undo_act.push_back(make_unique<UndoAdd>(repo,m));
 }
 
-void Service::modify(const int poz, const string cname, const string cprod, const string csubst, const int cprice) {
-    valid.validate(cname,cprod,csubst,cprice);
+void Service::modify(const int& poz, const string& cname, const string& cprod, const string& csubst, const int& cprice) {
+    Validator::validate(cname,cprod,csubst,cprice);
     vector<string> err;
     if(poz<0 || poz>=repo->get_elems().size()){
-        err.push_back("Pozitie invalida");
+        err.emplace_back("Pozitie invalida");
         throw RepoException(err);
     }
     auto m=repo->get_elems()[poz];
     repo->modify_medicine(Medicine(cname,cprod,csubst,cprice),poz);
-    undo_act.push_back(unique_ptr<UndoMod>(new UndoMod{repo,m,poz}));
+    undo_act.push_back(make_unique<UndoMod>(repo,m,poz));
 }
 
-void Service::del(const int poz){
+void Service::del(const int& poz){
     vector<string> err;
 
     if(poz<0 || poz>=repo->get_elems().size()){
-        err.push_back("Pozitie invalida");
+        err.emplace_back("Pozitie invalida");
         throw RepoException(err);
     }
     auto dlt=repo->get_elems()[poz];
     repo->delete_medicine(poz);
-    undo_act.push_back(unique_ptr<UndoDel>(new UndoDel{repo,dlt,poz}));
+    undo_act.push_back(make_unique<UndoDel>(repo,dlt,poz));
 }
 
-Service::~Service() {
-    //do nothing
-//    while(!undo_act.empty()){
-//        ActUndo* act=undo_act.back();
-//        undo_act.pop_back();
-//        delete act;
-//    }
-}
-
-bool Service::search(const string cname, const string cprod, const string csubst, const int cprice) {
+bool Service::search(const string& cname, const string& cprod, const string& csubst, const int& cprice) {
     //vector<string> err;
 
-    valid.validate(cname,cprod,csubst,cprice);
+    Validator::validate(cname,cprod,csubst,cprice);
 
     auto m=Medicine(cname,cprod,csubst,cprice);
 
@@ -84,20 +76,20 @@ bool Service::search(const string cname, const string cprod, const string csubst
 
 }
 
-void Service::filter(int crit, string val,vector<Medicine>& rez) {
+void Service::filter(int crit, const string& val,vector<Medicine>& rez) {
     if(crit==0){
         vector <string> err;
         int prc=0;
         bool vld=true;
-        for(int i=0; i<val.size(); ++i){
-            if('0'<=val[i] && val[i]<='9'){
-                prc=prc*10+(val[i]-'0');
+        for(auto& ch : val){
+            if('0'<=ch && ch<='9'){
+                prc=prc*10+(ch-'0');
             } else {
                 vld=false;
             }
         }
         if(!vld){
-            err.push_back("Pret invalid");
+            err.emplace_back("Pret invalid");
             throw RepoException(err);
         }
 
@@ -142,7 +134,7 @@ void Service::sort(int crit, vector<Medicine>& rez) {
 void Service::undo() {
     if(undo_act.empty()){
         vector<string> err;
-        err.push_back("Nu exista operatii la care sa se faca undo");
+        err.emplace_back("Nu exista operatii la care sa se faca undo");
         throw RepoException(err);
     }
     unique_ptr<ActUndo> act=move(undo_act.back());

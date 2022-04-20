@@ -39,20 +39,20 @@ public:
      * @param price pretul med.
      */
     Medicine();
-    Medicine(const string name, const string prod, const string subst, const int price);
+    Medicine(const string& name, const string& prod, const string& subst, const int& price);
 
-    Medicine(const Medicine& m);
+    Medicine(const Medicine& m)=default;
     //gettee
-    string get_name() const{
+    [[nodiscard]]string get_name() const{
         return name;
     }
-    string get_prod() const{
+    [[nodiscard]] string get_prod() const{
         return prod;
     }
-    string get_subst() const{
+    [[nodiscard]]string get_subst() const{
         return subst;
     }
-    int get_price() const{
+    [[nodiscard]]int get_price() const{
         return price;
     }
 
@@ -60,7 +60,7 @@ public:
     bool operator==(const Medicine& ot);
 
     //egalitate
-    Medicine operator=(const Medicine& ot);
+    Medicine& operator=(const Medicine& ot);
 
 private:
     string name;
@@ -82,7 +82,7 @@ public:
      * @param price pretul
      * @return un string de erori
      */
-    void validate(const string name, const string prod, const string subst, const int price) const;
+    static void validate(const string& name, const string& prod, const string& subst, const int& price) ;
 };
 
 /**
@@ -90,6 +90,6 @@ public:
  * @param S stringul de verificat
  * @return 0 sau 1 ca raspuns
  */
-bool has_letters(const string S);
+bool has_letters(const string& S);
 
 #endif //LAB06_7_DOMAIN_H

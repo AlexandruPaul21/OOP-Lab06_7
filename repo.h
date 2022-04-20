@@ -19,7 +19,7 @@ using namespace std;
  */
 class Repo{
 public:
-    Repo();
+    Repo()=default;
     Repo(const Repo& ot){*this=ot;}
     /**
      * Adauga un medicament in repo
@@ -46,10 +46,9 @@ public:
      */
     virtual void delete_medicine(int poz);
 
-    virtual ~Repo(){};
+    virtual ~Repo()=default;
 
 private:
-    int op;
     vector<Medicine> elems;
 };
 
@@ -57,7 +56,6 @@ private:
 class FileRepo: public Repo{
 private:
     string filename;
-    int op;
 
     void load_from_file();
 
@@ -65,10 +63,10 @@ private:
 
 public:
     FileRepo()=default;
-    FileRepo(string fn);
-    FileRepo(const FileRepo& ot){*this=ot;};
+    explicit FileRepo(string fn);
+    FileRepo(const FileRepo& ot) : Repo(ot) {*this=ot;};
 
-    ~FileRepo();
+    ~FileRepo() override =default;
 
     void add_medicine(const Medicine& a) override{
         Repo::add_medicine(a);
@@ -94,7 +92,7 @@ public:
 class RepoException{
     vector<string> msg;
 public:
-    RepoException(const vector<string>& errors): msg{errors}{}
+    explicit RepoException(const vector<string>& errors): msg{errors}{}
 
     friend ostream& operator<<(ostream& out,const RepoException& ex);
 };
@@ -105,7 +103,7 @@ ostream& operator<<(ostream& out, const RepoException& ex);
 class ActUndo{
 public:
     virtual void doUndo()=0;
-    virtual ~ActUndo(){};
+    virtual ~ActUndo()=default;
 };
 
 class UndoAdd:public ActUndo{

@@ -34,7 +34,7 @@ Vector_Man<ElemType>::~Vector_Man() {
 }
 
 template <class ElemType>
-void Vector_Man<ElemType>::push_back(const ElemType elm) {
+void Vector_Man<ElemType>::push_back(const ElemType& elm) {
     ensure_cap();
     elem[sze++]=elm;
 }
@@ -45,7 +45,7 @@ void Vector_Man<ElemType>::ensure_cap() {
         return;
     }
     cp*=2;
-    ElemType* temp=new ElemType[cp];
+    auto* temp=new ElemType[cp];
     for(int i=0; i<sze; ++i){
         temp[i]=elem[i];
     }
@@ -72,7 +72,7 @@ ElemType *Vector_Man<ElemType>::end() const{
 }
 
 template <class ElemType>
-void Vector_Man<ElemType>::erase(const int pos) {
+void Vector_Man<ElemType>::erase(const int& pos) {
     for(int i=pos; i<sze-1; ++i){
         elem[i]=elem[i+1];
     }
@@ -103,6 +103,7 @@ void Vector_Man<ElemType>::copy(Vector_Man<ElemType>& ot) {
 template<class ElemType>
 Vector_Man<ElemType>& Vector_Man<ElemType>::operator=(const Vector_Man &ot) {
     //cout<<"from: "<<&ot.elem<<" to "<<&elem<<" copied\n";
+    if(this==&ot) return *this;
     cp=ot.cp;
     sze=0;
     for(int i=0; i<ot.sze; ++i){

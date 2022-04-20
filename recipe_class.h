@@ -27,7 +27,7 @@ public:
      * Returneaza toate medicamentele din reteta
      * @return vector de medicine cu medicamentele din reteta
      */
-    vector<Medicine> get_all()const;
+    [[nodiscard]]vector<Medicine> get_all()const;
 
     /**
      * Adauga un nou medicament in reteta
@@ -45,13 +45,13 @@ public:
      * @param elems medicamentele disponibile
      * @param q numarul de medicamente ce trebuie adaugate
      */
-    void random_add(const vector<Medicine>& elems,const int q);
+    void random_add(const vector<Medicine>& elems,const int& q);
 
     /**
      * Salveaza in fisier entitatile
      * @param filename numele fisierului
      */
-    void save_to_file(const string filename);
+    void save_to_file(const string& filename);
 };
 
 #endif //LAB06_7_RECIPE_CLASS_H

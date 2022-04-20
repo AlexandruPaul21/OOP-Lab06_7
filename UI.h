@@ -19,7 +19,7 @@ public:
      * Constructorul
      * @param srv un service
      */
-    Console(Service& srv) :srv{srv}{};
+    explicit Console(Service& srv) :srv{srv}{};
 
     /**
      * Afiseaza UI-ul

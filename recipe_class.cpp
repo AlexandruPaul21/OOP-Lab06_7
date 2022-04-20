@@ -18,7 +18,7 @@ void Recipe::empty_recipe() {
     comp.clear();
 }
 
-void Recipe::random_add(const vector<Medicine>& elems,const int q) {
+void Recipe::random_add(const vector<Medicine>& elems,const int& q) {
     std::mt19937 mt{ std::random_device{}() };
     std::uniform_int_distribution<> dist(0, elems.size()-1);
     for(int i=0; i<q; ++i){
@@ -27,7 +27,7 @@ void Recipe::random_add(const vector<Medicine>& elems,const int q) {
     }
 }
 
-void Recipe::save_to_file(const string filename) {
+void Recipe::save_to_file(const string& filename) {
     ofstream fout(filename);
     fout<<"First cell\n";
     fout<<"Nrcrt. Nume Prod Subst Pret\n";

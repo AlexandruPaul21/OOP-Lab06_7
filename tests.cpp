@@ -47,10 +47,9 @@ void test_domain(){
     assert(m.get_price()==5);
 
     //test validator
-    Validator v;
 
     try {
-        v.validate("", "Bayer", "paracetamol", 10);
+        Validator::validate("", "Bayer", "paracetamol", 10);
         assert(false);
     } catch (ValidationException& val){
         //cout<<val;
@@ -58,28 +57,28 @@ void test_domain(){
     }
 
     try {
-        v.validate("", "", "", -5);
+        Validator::validate("", "", "", -5);
         assert(false);
     } catch (ValidationException& val){
         assert(true);
     }
 
     try{
-        v.validate("Parasinus","Bayer","paracetamol",-5);
+        Validator::validate("Parasinus","Bayer","paracetamol",-5);
         assert(false);
     } catch(ValidationException& val){
         assert(true);
     }
 
     try{
-        v.validate("Parasinus","Bayer","paracetamol",10);
+        Validator::validate("Parasinus","Bayer","paracetamol",10);
         assert(true);
     } catch(ValidationException& val){
         assert(false);
     }
 
     try{
-        v.validate("Parasinus","","paracetamol",10);
+        Validator::validate("Parasinus","","paracetamol",10);
         assert(false);
     } catch(ValidationException& val){
         assert(true);
@@ -87,14 +86,14 @@ void test_domain(){
     }
 
     try{
-        v.validate("Parasinus","Bayer","",10);
+        Validator::validate("Parasinus","Bayer","",10);
         assert(false);
     } catch(ValidationException& val){
         assert(true);
     }
 
     try{
-        v.validate("-5748654","-5748654","-5748654",10);
+        Validator::validate("-5748654","-5748654","-5748654",10);
         assert(false);
     } catch(ValidationException& val){
         assert(true);
@@ -153,11 +152,10 @@ void test_repo(){
 
     frp.add_medicine(Medicine("Parasinus","Pharma","paracetamol",10));
 
-    return;
 }
 
 void test_service(){
-    FileRepo* r=new FileRepo("chaos.txt");
+    auto* r=new FileRepo("chaos.txt");
     auto v=Validator();
 
     auto s=Service(r,v);
@@ -181,7 +179,7 @@ void test_service(){
     assert(mv[0].get_subst()=="paracetamol");
 
     s.undo();
-    assert(s.get_all_ent().size()==0);
+    assert(s.get_all_ent().empty());
 
     s.add("Parasinus","Bayer","paracetamol",10);
 
@@ -413,8 +411,8 @@ void test_vector(){
 
     assert(!v.empty());
 
-    for(auto it=v.begin(); it!=v.end(); ++it){
-        assert(*it==5);
+    for(auto& it : v){
+        assert(it==5);
     }
     v.push_back(10);
 
@@ -487,12 +485,12 @@ void test_recipe(){
 
     r.empty_recipe();
     res=r.get_all();
-    assert(res.size()==0);
+    assert(res.empty());
 
     vector<Medicine> s;
-    s.push_back(Medicine("Parasinus","Bayer","parasinus",10));
-    s.push_back(Medicine("ParaPenta","Pharma","parasinus",5));
-    s.push_back(Medicine("Algocalmin","Pharma1","ibuprofen",10));
+    s.emplace_back(Medicine("Parasinus","Bayer","parasinus",10));
+    s.emplace_back(Medicine("ParaPenta","Pharma","parasinus",5));
+    s.emplace_back(Medicine("Algocalmin","Pharma1","ibuprofen",10));
 
     r.random_add(s,2);
     assert(r.get_all().size()==2);
@@ -501,6 +499,4 @@ void test_recipe(){
 
     r.random_add(s,5);
     r.save_to_file("file.csv");
-
-    return;
 }

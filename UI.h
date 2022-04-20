@@ -67,7 +67,13 @@ private:
      */
     void recipe() const;
 
+    /**
+     * UI pentru batch mode
+     */
     void batch_mode() const;
+
+    void undo_ui() const;
+
     Service &srv;
 };
 

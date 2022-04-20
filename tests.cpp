@@ -146,13 +146,28 @@ void test_repo(){
     assert(mv[0].get_prod()=="Bayer");
     assert(mv[0].get_subst()=="paracetamol");
     assert(mv[0].get_price()==5);
+
+
+    FileRepo frp{"test_file.txt"};
+
+    frp.add_medicine(Medicine("Parasinus","Pharma","paracetamol",10));
+
+    return;
 }
 
 void test_service(){
-    auto r=Repo();
+    auto r=FileRepo("chaos.txt");
     auto v=Validator();
 
     auto s=Service(r,v);
+
+    //testam daca urla la noi
+    try{
+        s.undo();
+        assert(false);
+    } catch(RepoException& re){
+        assert(true);
+    }
 
     //test add
     s.add("Parasinus","Bayer","paracetamol",10);
@@ -163,6 +178,11 @@ void test_service(){
     assert(mv[0].get_name()=="Parasinus");
     assert(mv[0].get_prod()=="Bayer");
     assert(mv[0].get_subst()=="paracetamol");
+
+    s.undo();
+    assert(s.get_all_ent().size()==0);
+
+    s.add("Parasinus","Bayer","paracetamol",10);
 
     try{
         s.add("","Bayer","paracetamol",10);
@@ -217,6 +237,17 @@ void test_service(){
     //test mod
     s.modify(0,"ParaPenta","Dona","paracetamol",15);
 
+    //undo mod
+    s.undo();
+
+    mv=s.get_all_ent();
+    assert(mv[0].get_price()==10);
+    assert(mv[0].get_name()=="Parasinus");
+    assert(mv[0].get_prod()=="Bayer");
+    assert(mv[0].get_subst()=="paracetamol");
+
+    s.modify(0,"ParaPenta","Dona","paracetamol",15);
+
     mv=s.get_all_ent();
 
     assert(mv[0].get_price()==15);
@@ -253,6 +284,18 @@ void test_service(){
     assert(mv[0].get_prod()=="Bayer");
     assert(mv[0].get_subst()=="paracetamol");
 
+    //undo_del
+    s.undo();
+
+    mv=s.get_all_ent();
+
+    assert(mv[0].get_price()==15);
+    assert(mv[0].get_name()=="ParaPenta");
+    assert(mv[0].get_prod()=="Dona");
+    assert(mv[0].get_subst()=="paracetamol");
+
+    s.del(0);
+
     try{
         s.add("Parasinus","Bayer","paracetamol",10);
         assert(false);
@@ -279,6 +322,10 @@ void test_service(){
     //filter test
     s.add("Parasinus","Bayer","parasinus",10);
     s.add("ParaPenta","Pharma","parasinus",5);
+    s.add("Algocalmin","Pharma1","ibuprofen",10);
+
+    s.undo();
+
     s.add("Algocalmin","Pharma1","ibuprofen",10);
 
     {

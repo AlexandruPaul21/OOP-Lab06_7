@@ -8,9 +8,10 @@
 
 using std::sort;
 
-Service::Service(Repo& rp, Validator& vd) {
+Service::Service(FileRepo& rp, Validator& vd) {
     repo=rp;
     valid=vd;
+    undo_act.clear();
 }
 
 vector<Medicine>& Service::get_all_ent() {
@@ -31,6 +32,7 @@ void Service::add(const string cname, const string cprod, const string csubst, i
         throw RepoException(err);
     }
     repo.add_medicine(m);
+    undo_act.push_back(new UndoAdd{&repo,m});
 }
 
 void Service::modify(const int poz, const string cname, const string cprod, const string csubst, const int cprice) {
@@ -40,9 +42,9 @@ void Service::modify(const int poz, const string cname, const string cprod, cons
         err.push_back("Pozitie invalida");
         throw RepoException(err);
     }
-    auto m=Medicine(cname,cprod,csubst,cprice);
-    repo.modify_medicine(m,poz);
-
+    auto m=repo.get_elems()[poz];
+    repo.modify_medicine(Medicine(cname,cprod,csubst,cprice),poz);
+    undo_act.push_back(new UndoMod{&repo,m,poz});
 }
 
 void Service::del(const int poz){
@@ -52,11 +54,18 @@ void Service::del(const int poz){
         err.push_back("Pozitie invalida");
         throw RepoException(err);
     }
+    auto dlt=repo.get_elems()[poz];
     repo.delete_medicine(poz);
+    undo_act.push_back(new UndoDel{&repo,dlt,poz});
 }
 
 Service::~Service() {
     //do nothing
+    while(!undo_act.empty()){
+        ActUndo* act=undo_act.back();
+        undo_act.pop_back();
+        delete act;
+    }
 }
 
 bool Service::search(const string cname, const string cprod, const string csubst, const int cprice) {
@@ -128,4 +137,16 @@ void Service::sort(int crit, vector<Medicine>& rez) {
     } else if(crit==2){
         ::sort(rez.begin(),rez.end(), crit_2);
     }
+}
+
+void Service::undo() {
+    if(undo_act.empty()){
+        vector<string> err;
+        err.push_back("Nu exista operatii la care sa se faca undo");
+        throw RepoException(err);
+    }
+    ActUndo* act=undo_act.back();
+    act->doUndo();
+    undo_act.pop_back();
+    delete act;
 }

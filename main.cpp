@@ -10,7 +10,7 @@
  */
 int main() {
     //test_all();
-    Repo repo;
+    FileRepo repo{"data.txt"};
     Validator valid;
     Service srv{repo,valid};
 

@@ -366,6 +366,16 @@ void Console::batch_mode() const{
 }
 
 
+void Console::undo_ui() const{
+    try{
+        srv.undo();
+        cout<<"Operatie realizata cu succes\n";
+    } catch(RepoException& re){
+        cout<<re;
+    }
+
+}
+
 void Console::show_ui() const {
     cout<<"Bine ati venit!\n";
     bool end=false;
@@ -380,6 +390,7 @@ void Console::show_ui() const {
         cout<<"7. Sortare\n";
         cout<<"8. Creare reteta\n";
         cout<<"9. Batch Mode\n";
+        cout<<"10. Undo\n";
         cout<<"0. Exit\n";
         cout << "Comanda dvs: ";
         string ans;
@@ -405,6 +416,8 @@ void Console::show_ui() const {
             recipe();
         } else if(ans=="9") {
             batch_mode();
+        } else if(ans=="10") {
+            undo_ui();
         } else if(ans=="0") {
             end=true;
         } else {

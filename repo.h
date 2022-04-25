@@ -14,10 +14,24 @@
 
 using namespace std;
 
+class AbsRepo{
+public:
+    virtual void add_medicine(const Medicine& a)=0;
+
+    virtual void modify_medicine(const Medicine& a,int poz)=0;
+
+    virtual void delete_medicine(int poz)=0;
+
+    virtual vector<Medicine>& get_elems()=0;
+
+    virtual ~AbsRepo()=default;
+};
+
+
 /**
  * Clasa repository
  */
-class Repo{
+class Repo:public AbsRepo{
 public:
     Repo()=default;
     Repo(const Repo& ot){*this=ot;}
@@ -25,26 +39,26 @@ public:
      * Adauga un medicament in repo
      * @param a medicamentul de adaugat
      */
-    virtual void add_medicine(const Medicine& a);
+    virtual void add_medicine(const Medicine& a) override;
 
     /**
      * Modifica un medicament deja existent
      * @param a medicamentul de modificat
      * @param poz pozitia medicamentului
      */
-    virtual void modify_medicine(const Medicine& a, int poz);
+    virtual void modify_medicine(const Medicine& a, int poz) override;
 
     /**
      * Functie getter
      * @return un vector cu elemente de tip medcicine
      */
-    vector<Medicine>& get_elems();
+    vector<Medicine>& get_elems() override;
 
     /**
      * Sterge medicamentul de pe o pozitie
      * @param poz pozitia medicamentului
      */
-    virtual void delete_medicine(int poz);
+    virtual void delete_medicine(int poz) override;
 
     virtual ~Repo()=default;
 
@@ -100,54 +114,6 @@ public:
 ostream& operator<<(ostream& out, const RepoException& ex);
 
 
-class ActUndo{
-public:
-    virtual void doUndo()=0;
-    virtual ~ActUndo()=default;
-};
 
-class UndoAdd:public ActUndo{
-private:
-    FileRepo* fr;
-    Medicine last;
-public:
-    UndoAdd(FileRepo* f,const Medicine& lst): fr{f}, last{lst} {}
-    void doUndo() override{
-        int i=0;
-        for(auto& it : fr->get_elems()){
-            if(it==last){
-                break;
-            }
-            ++i;
-        }
-        fr->delete_medicine(i);
-    }
-};
-
-class UndoMod:public ActUndo{
-private:
-    FileRepo* fr;
-    Medicine last;
-    int l_poz;
-public:
-    UndoMod(FileRepo* f,const Medicine& m,const int l_p): fr{f}, last{m}, l_poz{l_p} {}
-    void doUndo() override{
-        fr->modify_medicine(last,l_poz);
-    }
-};
-
-class UndoDel:public ActUndo{
-private:
-    FileRepo* fr;
-    Medicine dlt;
-    int poz;
-public:
-    UndoDel(FileRepo* f, const Medicine& m, const int pz): fr{f}, dlt{m}, poz{pz} {}
-    void doUndo() override{
-        auto it=fr->get_elems().begin();
-        it+=poz;
-        fr->get_elems().insert(it,dlt);
-    }
-};
 
 #endif //LAB06_7_REPO_H

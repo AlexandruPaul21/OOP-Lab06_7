@@ -7,6 +7,7 @@
 
 #include "repo.h"
 #include "domain.h"
+#include "undo_act.h"
 #include <vector>
 #include <memory>
 
@@ -20,7 +21,7 @@ public:
      * @param rp repo
      * @param vd validator
      */
-    Service(FileRepo* rp, Validator& vd);
+    Service(AbsRepo* rp, Validator& vd);
 
     /**
      * Functia returneaza toate entitatile
@@ -86,8 +87,8 @@ public:
     ///destructor
     ~Service()=default;
 private:
-    FileRepo* repo;
-    Validator valid;
+    AbsRepo* repo;
+    [[maybe_unused]] Validator valid;
     vector<unique_ptr<ActUndo>> undo_act;
 };
 

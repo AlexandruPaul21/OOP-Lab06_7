@@ -9,7 +9,7 @@
 
 using std::sort;
 
-Service::Service(FileRepo* rp, Validator& vd) {
+Service::Service(AbsRepo* rp, Validator& vd) {
     repo=rp;
     valid=vd;
     undo_act.clear();

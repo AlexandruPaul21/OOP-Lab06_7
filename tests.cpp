@@ -5,8 +5,6 @@
 #include "tests.h"
 
 #include "vector_man.h"
-#include "domain.h"
-#include "repo.h"
 #include "service.h"
 #include <iostream>
 #include <fstream>
@@ -151,6 +149,48 @@ void test_repo(){
     FileRepo frp{"test_file.txt"};
 
     frp.add_medicine(Medicine("Parasinus","Pharma","paracetamol",10));
+
+    auto prp=RepoProb(1);
+    prp.add_medicine(Medicine("Parasinus","Bayer","paracetamol",5));
+
+    mv=prp.get_elems();
+
+    assert(mv.size() == 1);
+    assert(mv[0].get_name() == "Parasinus");
+    assert(mv[0].get_prod() == "Bayer");
+    assert(mv[0].get_subst() == "paracetamol");
+    assert(mv[0].get_price() == 5);
+
+    prp.modify_medicine(Medicine("Nush","Bayer","paranol",10),0);
+
+    mv=prp.get_elems();
+
+    assert(mv.size() == 1);
+    assert(mv[0].get_name() == "Nush");
+    assert(mv[0].get_prod() == "Bayer");
+    assert(mv[0].get_subst() == "paranol");
+    assert(mv[0].get_price() == 10);
+
+    prp.add_medicine(Medicine("Parasinus","Bayer","paracetamol",5));
+
+    mv=prp.get_elems();
+
+    assert(mv.size() == 2);
+
+    prp.delete_medicine(0);
+
+    mv=prp.get_elems();
+
+    assert(mv.size() == 1);
+
+    auto noch=RepoProb(0);
+
+    try {
+        noch.add_medicine(Medicine("Parasinus", "Bayer", "paracetamol", 5));
+        assert(false);
+    } catch(BadLuckException& re){
+        assert(true);
+    }
 
 }
 

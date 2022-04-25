@@ -5,6 +5,8 @@
 #ifndef LAB06_7_TESTS_H
 #define LAB06_7_TESTS_H
 
+#include "UI.h"
+
 void test_gen();
 
 /**
@@ -36,5 +38,7 @@ void test_vector();
  * Test pentru recipe
  */
  void test_recipe();
+
+ void test_repo_prob();
 
 #endif //LAB06_7_TESTS_H

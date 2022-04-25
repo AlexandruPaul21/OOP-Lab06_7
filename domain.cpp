@@ -43,6 +43,11 @@ ostream &operator<<(ostream &out, const ValidationException &ex) {
     return out;
 }
 
+ostream& operator<<(ostream& out,const BadLuckException& ex){
+    out<<ex.msg;
+    return out;
+}
+
 void Validator::validate(
         const string& cname,
         const string& cprod,

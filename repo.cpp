@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <utility>
+#include <random>
 #include "repo.h"
 //#include "vector_man.h"
 //#include "vector_man.cpp"
@@ -64,4 +65,54 @@ void FileRepo::save_to_file() {
         fout<<it.get_name()<<";"<<it.get_prod()<<";"<<it.get_subst()<<";"<<it.get_price()<<"\n";
     }
     fout.close();
+}
+
+void RepoProb::add_medicine(const Medicine &m) {
+    det_luck();
+    elems.insert(make_pair(elems.size(),m));
+}
+
+void RepoProb::modify_medicine(const Medicine &m, int poz) {
+    det_luck();
+    for(auto& it : elems){
+        if(it.first==poz){
+            elems.erase(poz);
+            elems.insert(make_pair(poz,m));
+            break;
+        }
+    }
+}
+
+void RepoProb::delete_medicine(int poz) {
+    det_luck();
+    elems.erase(poz);
+    map<int,Medicine> sec;
+    sec.clear();
+    for(auto& it : elems){
+        sec.insert(make_pair(sec.size(),it.second));
+    }
+    elems=sec;
+}
+vector<Medicine> all;
+vector<Medicine>& RepoProb::get_elems() {
+    det_luck();
+    all.clear();
+    for(auto& it: elems){
+        all.push_back(it.second);
+    }
+    return all;
+}
+
+RepoProb::RepoProb(float chance) {
+    prob=chance;
+    elems.clear();
+}
+
+void RepoProb::det_luck() {
+    auto prb=int(prob*10);
+    int nr=rand()%10+1;
+    if(nr<=prb){
+        return;
+    }
+    throw BadLuckException("Teapa cumetre");
 }

@@ -25,6 +25,17 @@ public:
 
 ostream& operator<<(ostream&out,const ValidationException& ex);
 
+class BadLuckException{
+private:
+    string msg;
+public:
+    explicit BadLuckException(const string& str): msg{str}{}
+
+    friend ostream& operator<<(ostream& out,const BadLuckException& ex);
+};
+
+ostream& operator<<(ostream& out,const BadLuckException& ex);
+
 /**
  * Clasa de entitati
  */

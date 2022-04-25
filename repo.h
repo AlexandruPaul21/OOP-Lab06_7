@@ -9,6 +9,7 @@
 #include <vector>
 #include "domain.h"
 #include <sstream>
+#include <map>
 //#include "vector_man.h"
 //#include "vector_man.cpp"
 
@@ -34,7 +35,7 @@ public:
 class Repo:public AbsRepo{
 public:
     Repo()=default;
-    Repo(const Repo& ot){*this=ot;}
+    //Repo(const Repo& ot){*this=ot;}
     /**
      * Adauga un medicament in repo
      * @param a medicamentul de adaugat
@@ -78,7 +79,7 @@ private:
 public:
     FileRepo()=default;
     explicit FileRepo(string fn);
-    FileRepo(const FileRepo& ot) : Repo(ot) {*this=ot;};
+    //FileRepo(const FileRepo& ot) : Repo(ot) {*this=ot;};
 
     ~FileRepo() override =default;
 
@@ -99,6 +100,24 @@ public:
 
 };
 
+class RepoProb:public AbsRepo{
+private:
+    float prob;
+    map<int,Medicine> elems;
+    void det_luck();
+public:
+    RepoProb()=default;
+
+    explicit RepoProb(float chance);
+
+    void add_medicine(const Medicine& m) override;
+
+    void modify_medicine(const Medicine& m, int poz) override;
+
+    void delete_medicine(int poz) override;
+
+    vector<Medicine>& get_elems() override;
+};
 
 /**
  * Clasa custom de exceptie

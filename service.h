@@ -6,7 +6,6 @@
 #define LAB06_7_SERVICE_H
 
 #include "repo.h"
-#include "domain.h"
 #include "undo_act.h"
 #include <vector>
 #include <memory>
